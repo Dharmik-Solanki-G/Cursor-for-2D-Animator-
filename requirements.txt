@@ -1,0 +1,7 @@
+streamlit
+requests
+manim
+ffmpeg-python
+moviepy
+transformers
+torch
