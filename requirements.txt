@@ -1,7 +1,10 @@
-streamlit
+streamlit==1.29.0
 requests
 manim
 ffmpeg-python
 moviepy
 transformers
 torch
+numpy
+matplotlib
+pillow

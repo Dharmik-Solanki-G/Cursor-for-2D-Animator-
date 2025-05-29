@@ -5,3 +5,12 @@ backgroundColor="#121212"
 secondaryBackgroundColor="#1e1e1e"
 textColor="#e0e0e0"
 font="sans serif"
+
+[server]
+maxUploadSize = 200
+headless = true
+port = 8501
+address = "0.0.0.0"
+
+[browser]
+gatherUsageStats = false

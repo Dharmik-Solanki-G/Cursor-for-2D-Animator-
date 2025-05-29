@@ -5,6 +5,11 @@ import tempfile
 import requests
 import re
 from typing import Tuple
+import os
+import shutil
+import signal
+import subprocess
+from pathlib import Path
 
 # --------- CONFIG ---------
 OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
@@ -129,9 +134,72 @@ def save_code_to_file(code: str, folder: str) -> str:
         f.write(code)
     return path
 
+def get_manim_path():
+    """Detect Manim path for different environments"""
+    # Try to find manim executable
+    manim_path = shutil.which('manim')
+    if manim_path:
+        return manim_path
+    
+    # Fallback paths for different environments
+    possible_paths = [
+        '/usr/local/bin/manim',  # Docker container
+        '/opt/conda/bin/manim',  # Conda environment
+        '/home/manimuser/.local/bin/manim',  # Manim Docker image default
+        'manim'  # System PATH
+    ]
+    
+    for path in possible_paths:
+        if shutil.which(path) or os.path.exists(path):
+            return path
+    
+    return 'manim'  # Default fallback
+
+def render_with_timeout(command, timeout=300):
+    """Execute manim command with timeout and better error handling"""
+    try:
+        result = subprocess.run(
+            command, 
+            shell=True, 
+            capture_output=True, 
+            text=True, 
+            timeout=timeout,
+            cwd=os.getcwd()
+        )
+        return result
+    except subprocess.TimeoutExpired:
+        st.error("⏰ Animation rendering timed out (5 minutes). Try a simpler animation.")
+        return None
+    except Exception as e:
+        st.error(f"❌ Error during rendering: {str(e)}")
+        return None
+
+def execute_manim_render(temp_file, class_name, video_path):
+    """Execute manim rendering with cloud-optimized settings"""
+    MANIM_PATH = get_manim_path()
+    render_command = f"{MANIM_PATH} -pql {temp_file} {class_name} --output_file {video_path}"
+    
+    st.info("🎬 Rendering animation... (this may take 1-2 minutes)")
+    result = render_with_timeout(render_command, timeout=300)
+    
+    if result is None:
+        return False
+        
+    if result.returncode != 0:
+        st.error(f"❌ Rendering failed: {result.stderr}")
+        st.info("🔄 Trying alternative rendering settings...")
+        alt_command = f"{MANIM_PATH} --resolution 480,320 --fps 15 {temp_file} {class_name} --output_file {video_path}"
+        alt_result = render_with_timeout(alt_command, timeout=300)
+        if alt_result and alt_result.returncode == 0:
+            return True
+        return False
+    
+    return True
+
+
 def run_manim(scene_file: str, scene_name: str, output_dir: str) -> Tuple[bool, str]:
     """Run Manim with enhanced error handling."""
-    MANIM_PATH = r"C:\Users\Techcureindia\manimations\.venv\Scripts\manim.exe" # Replace with your Manim path 
+    MANIM_PATH = get_manim_path() # Replace with your Manim path 
     cmd = [
         MANIM_PATH,
         "-ql",
@@ -165,6 +233,24 @@ def run_manim(scene_file: str, scene_name: str, output_dir: str) -> Tuple[bool, 
     except Exception as e:
         return False, str(e)
 
+def get_api_key():
+    """Get API key from environment or user input"""
+    api_key = os.environ.get('OPENROUTER_API_KEY', '')
+    if api_key:
+        return api_key
+    if 'api_key' not in st.session_state:
+        st.session_state.api_key = ""
+    with st.sidebar:
+        st.markdown("### 🔑 API Configuration")
+        api_key = st.text_input(
+            "OpenRouter API Key",
+            value=st.session_state.api_key,
+            type="password",
+            help="Get your API key from https://openrouter.ai/keys"
+        )
+        st.session_state.api_key = api_key
+    return api_key
+
 # --------- STREAMLIT UI ENHANCEMENTS ---------
 
 st.set_page_config(page_title="Cursor for 2D Animator", layout="wide")
@@ -191,6 +277,9 @@ if "edit_mode" not in st.session_state:
     st.session_state.edit_mode = False
 if "current_animation" not in st.session_state:
     st.session_state.current_animation = None
+
+# Create persistent media directory
+os.makedirs("persistent_media", exist_ok=True)
 
 # UI Layout
 col1, col2 = st.columns([1, 1])
