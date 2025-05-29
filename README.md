@@ -1,5 +1,10 @@
 # Cursor for 2D Animator 🎬
 
+<div align="center">
+  <img src="gif/0529.gif" alt="Cursor 2D Animator Demo" width="800"/>
+  <p><em>Transform natural language into beautiful mathematical animations</em></p>
+</div>
+
 A powerful Streamlit application that generates mathematical animations using natural language descriptions. Powered by OpenRouter AI and Manim Community Edition, this tool transforms your text descriptions into beautiful 2D animations with code generation and editing capabilities.
 
 ## 🌟 Features
@@ -27,6 +32,28 @@ A powerful Streamlit application that generates mathematical animations using na
 - **Learning Manim**: Understand Manim syntax through AI-generated examples
 - **Rapid Prototyping**: Quickly test animation concepts
 - **Content Creation**: Produce animations for videos, tutorials, or social media
+
+## 🚀 Live Demo
+
+<div align="center">
+  <img src="gif/0529.gif" alt="Application Demo" width="700"/>
+  <p><em>Watch the app in action - from text description to animated video</em></p>
+</div>
+
+## 🎨 Key Features Showcase
+
+<img src="gif/0529.gif" alt="Natural Language Animation" width="400" align="right"/>
+
+### ✨ Natural Language to Animation
+Simply describe what you want to animate in plain English, and watch as our AI generates beautiful Manim animations automatically.
+
+### ⚡ Real-time Code Generation  
+AI generates clean, executable Manim CE Python code that you can view, modify, and learn from.
+
+### 🔧 Interactive Edit Mode
+Modify existing animations with simple text instructions - no coding required!
+
+<br clear="right"/>
 
 ## 🚀 Quick Start
 
@@ -151,9 +178,19 @@ Try this example prompt:
 Create a blue circle that moves in a figure-8 pattern while changing colors from blue to red
 ```
 
+<div align="center">
+  <img src="gif/0529.gif" alt="Example Animation Output" width="500"/>
+  <p><em>Example of generated animation from natural language description</em></p>
+</div>
+
 ## 📖 Usage Guide
 
 ### Creating Your First Animation
+
+<div align="center">
+  <img src="gif/0529.gif" alt="Step by Step Process" width="600"/>
+  <p><em>Complete workflow: Describe → Generate → Download</em></p>
+</div>
 
 1. **Enter API Key**: Input your OpenRouter API key (required for first use)
 2. **Describe Animation**: Write a clear description of what you want to animate
@@ -185,21 +222,52 @@ Display the text "Hello Manim" with each letter appearing one by one
 
 ### Editing Existing Animations
 
+<img src="gif/0529.gif" alt="Edit Mode Demo" width="450" align="left"/>
+
 1. **Generate Initial Animation**: Create your base animation first
-2. **Enter Edit Mode**: Click "✏️ Edit Current Animation"
+2. **Enter Edit Mode**: Click "✏️ Edit Current Animation"  
 3. **Describe Changes**: Specify what you want to modify
 4. **Apply Changes**: The AI will modify the existing code
 5. **Iterate**: Continue editing until satisfied
 
-### Edit Examples
+<br clear="left"/>
+
+### Example Animation Prompts
+
+**Basic Shapes:**
 ```
-Change the color to green
-Make it rotate slower
-Add a second square that moves in the opposite direction
-Increase the size by 50%
+Create a red square that rotates 360 degrees clockwise
 ```
 
-## 🛠️ Configuration Options
+**Mathematical Concepts:**
+```
+Show a sine wave function being drawn from left to right with a moving dot
+```
+
+**Complex Animations:**
+```
+Create two circles orbiting around a central point with different speeds and colors
+```
+
+**Text Animations:**
+```
+Display the text "Hello Manim" with each letter appearing one by one
+```
+
+## 🔧 Configuration Options
+
+### Streamlit Configuration
+The `.streamlit/config.toml` file contains app-specific settings:
+```toml
+[theme]
+primaryColor = "#ff6b6b"
+backgroundColor = "#ffffff"
+secondaryBackgroundColor = "#f0f2f6"
+textColor = "#262730"
+
+[server]
+maxUploadSize = 200
+```
 
 ### Model Configuration
 You can change the AI model by modifying:
@@ -222,15 +290,8 @@ Modify Manim render settings:
 # -qk: 4K quality (slow)
 ```
 
-### Timeout Settings
-Adjust timeouts for different operations:
-```python
-# API timeout (seconds)
-timeout=60
-
-# Manim execution timeout (seconds)
-timeout=120
-```
+### Media Storage
+Generated animations are automatically saved in the `persistent_media/` directory for future reference and download.
 
 ## 🔧 Troubleshooting
 
@@ -291,17 +352,14 @@ pip install --upgrade streamlit requests manim numpy matplotlib
 
 ```
 cursor-2d-animator/
-├── app.py                 # Main Streamlit application
-├── requirements.txt       # Python dependencies
-├── README.md             # This file
-├── .gitignore            # Git ignore file
-├── examples/             # Example animations
-│   ├── basic_shapes.py
-│   ├── mathematical.py
-│   └── text_animations.py
-└── docs/                 # Additional documentation
-    ├── api_reference.md
-    └── animation_examples.md
+├── app.py                    # Main Streamlit application
+├── README.md                 # Project documentation
+├── requirements.txt          # Python dependencies
+├── .streamlit/
+│   └── config.toml          # Streamlit configuration
+├── gif/
+│   └── 0529.gif            # Demo animations and screenshots
+└── persistent_media/        # Generated animations storage
 ```
 
 ## 🎨 Animation Examples
@@ -316,7 +374,7 @@ class RotatingSquare(Scene):
         self.play(Rotate(square, TAU), run_time=3)
 ```
 
-### Mathematical Functions
+### Mathematical Functions  
 ```python
 from manim import *
 
@@ -337,6 +395,11 @@ class TextExample(Scene):
         self.play(Write(text))
         self.play(text.animate.set_color(RED))
 ```
+
+<div align="center">
+  <img src="gif/0529.gif" alt="Generated Animation Examples" width="600"/>
+  <p><em>Various types of animations you can create with natural language descriptions</em></p>
+</div>
 
 ## 🤝 Contributing
 
