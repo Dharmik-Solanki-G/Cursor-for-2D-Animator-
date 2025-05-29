@@ -401,48 +401,7 @@ class TextExample(Scene):
   <p><em>Various types of animations you can create with natural language descriptions</em></p>
 </div>
 
-## 🤝 Contributing
 
-We welcome contributions! Here's how you can help:
-
-### Reporting Issues
-1. Check existing issues first
-2. Use the issue template
-3. Provide detailed reproduction steps
-4. Include error messages and screenshots
-
-### Feature Requests
-1. Describe the feature clearly
-2. Explain the use case
-3. Consider backward compatibility
-
-### Code Contributions
-1. Fork the repository
-2. Create a feature branch
-3. Follow PEP 8 style guidelines
-4. Add tests for new features
-5. Update documentation
-6. Submit a pull request
-
-### Development Setup
-```bash
-# Clone your fork
-git clone https://github.com/yourusername/cursor-2d-animator.git
-
-# Install development dependencies
-pip install -r requirements-dev.txt
-
-# Run tests
-python -m pytest tests/
-
-# Run linting
-flake8 app.py
-black app.py
-```
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
